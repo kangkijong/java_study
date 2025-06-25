@@ -1,4 +1,5 @@
 package chapter03;
+
 import java.lang.String;	// 주석처리해도 오류뜨지 않음(자주쓰는 것은 lang에 들어가 있어서)
 
 public class Variable {

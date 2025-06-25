@@ -2,6 +2,7 @@ package chapter03;
 
 //import java.lang.String;
 //import java.lang.System;	// 따로 선언하지 않아도 사용이 가능함
+
 import java.util.Scanner;
 
 public class ReferenceDataType {

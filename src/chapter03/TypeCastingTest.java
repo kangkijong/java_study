@@ -34,5 +34,4 @@ public class TypeCastingTest {
 		System.out.println(bnumber);
 		System.out.println(inumber2);
 	}
-
 }
