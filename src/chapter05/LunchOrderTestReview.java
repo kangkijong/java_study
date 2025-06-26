@@ -58,7 +58,7 @@ public class LunchOrderTestReview {
 			System.exit(0);
 		}
 		
-		// 3. 주문 내역 출력 : 주문한 메뉴는 (햄버거), 결제금액(), 잔돈() 입니다.
+		// 3. 주문 내역 출력 : 주문한 메뉴는 (), 결제금액(), 잔돈() 입니다.
 		System.out.println("주문하신 메뉴는 "+menuName+"입니다. 결제금액은 "+charge+", 잔돈은 "+change+"원 입니다.");
 		
 	}
