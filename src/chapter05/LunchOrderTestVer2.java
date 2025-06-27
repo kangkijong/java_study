@@ -79,7 +79,6 @@ public class LunchOrderTestVer2 {
 		
 		// 3. 주문 내역 출력 : 주문한 메뉴는 (), 결제금액(), 잔돈() 입니다.
 		System.out.println("주문하신 메뉴는 "+menuName+", 결제금액("+charge+"), 잔돈("+change+") 입니다.");
-		
 	}
 
 }
