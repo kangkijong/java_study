@@ -24,9 +24,9 @@ public class ScoreTestVer1 {
 				scoreList[i] = scan.nextInt();
 				tot += scoreList[i];
 			} else {
-				scoreList[scoreList.length-2] = tot;						// 총점
+				scoreList[scoreList.length-2] = tot;					// 총점
 				scoreList[scoreList.length-1] = tot/subjectList.length;	// 평균
-				i = scoreList.length;	// for문이 종료되는 시점(break;) 
+				i = scoreList.length;	// for문이 종료되는 시점을 이용(break;)
 			}
 		}
 		
