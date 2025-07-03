@@ -1,6 +1,6 @@
 package chapter07;
 
-public class Cartest {
+public class CarTest {
 
 	public static void main(String[] args) {
 		// 1. 객체 생성

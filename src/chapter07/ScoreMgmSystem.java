@@ -1,13 +1,16 @@
 package chapter07;
 
 import java.util.Scanner;
-
+/*
+ * - 학생 3명의 점수를 입력 받는다.
+ * - 한 명 입력 후 계속 입력 여부를 메시지로 출력 후 입력 받는다. 
+ */
 public class ScoreMgmSystem {
 	// Field
 	String admin;
 	Student student;
 	Scanner scan = new Scanner(System.in);
-//	Student[] slist = new Student[10];	// 배열로 학생 10명의 정보를 받는다면
+	Student[] slist = new Student[3];	// 배열로 학생 10명의 정보를 받는다면
 	
 	// Constructor
 	public ScoreMgmSystem() {}
