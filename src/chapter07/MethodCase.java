@@ -54,5 +54,4 @@ public class MethodCase {
 		System.out.println("method4 --> "+mc.method4("홍길동"));
 	}
 	
-	
 }
