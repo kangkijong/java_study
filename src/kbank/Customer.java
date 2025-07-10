@@ -1,14 +1,18 @@
 package kbank;
 
+import java.util.Scanner;
+
 public class Customer {
 	private String name;
 	private String accountNumber;
 	private String password;
 	private int money;
 	private AccountPaperVo accountPaper;
+	private Scanner scan;
 	
 	public Customer() {}
 	public Customer(String name, String accountNumber, String password, int money) {
+		scan = new Scanner(System.in);
 		this.name = name;
 		this.accountNumber = accountNumber;
 		this.password = password;
@@ -24,6 +28,9 @@ public class Customer {
 		this.accountPaper.setAccountNumber(this.accountNumber);
 		this.accountPaper.setPassword(this.password);
 		this.accountPaper.setMoney(this.money);
+	}
+	public Scanner getScan() {
+		return scan;
 	}
 	public String getName() {
 		return name;
