@@ -1,20 +1,22 @@
-package kbank;
+package kbank2;
 
 /**
- * 은행에 비치되어 있는 입출금 용지
+ * 은행의 고객 정보를 담는 클래스이며, 은행직원을 통해 생성된다. 
  */
-public class AccountPaperVo {
+public class AccountVo {
 	private String name;
 	private String accountNumber;
 	private String password;
-	private int money;
-	private static AccountPaperVo accountPaper = new AccountPaperVo();
+	private int balance;
 	
-	private AccountPaperVo() {}
-	
-	public static AccountPaperVo getInstance() {
-		return accountPaper;
+	public AccountVo() {}
+	public AccountVo(String name, String accountNumber, String password, int balance) {
+		this.name = name;
+		this.accountNumber = accountNumber;
+		this.password = password;
+		this.balance = balance;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -33,11 +35,11 @@ public class AccountPaperVo {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getMoney() {
-		return money;
+	public int getBalance() {
+		return balance;
 	}
-	public void setMoney(int money) {
-		this.money = money;
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 	
 	
