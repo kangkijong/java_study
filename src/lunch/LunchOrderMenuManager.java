@@ -68,7 +68,7 @@ public class LunchOrderMenuManager {
 		System.out.println("\t 4. 결제 내역");		
 		System.out.println("\t 9. 프로그램 종료");		
 		System.out.println("******************************************");
-		System.out.println("***** Food Mart에 오신것을 환영합니다");	
+		System.out.println("******** Food Mart에 오신것을 환영합니다 ********");	
 		
 //		createLunchMenu();
 		selectMainMenu();

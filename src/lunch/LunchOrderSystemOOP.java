@@ -98,7 +98,7 @@ public class LunchOrderSystemOOP {
 			}
 		}
 		
-		System.out.println("=> 주문 완료!!"+orderCount);
+		System.out.println("=> 주문 완료!!");
 		menuManager.showMainMenu();
 	}
 	
