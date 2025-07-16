@@ -11,7 +11,7 @@ public class StringBufferTest {
 		StringBuffer sb = new StringBuffer();
 		sb.append("홍길동");
 		sb.append("은 자바를");
-		sb.append(" 열심히 공부한다.");
+		sb.append(" 열심히 공부한다.");	//매개변수 값을 문자열로 변환하여 StringBuffer 객체의 문자열값의 뒤에 붙임
 		System.out.println(sb.capacity());
 		System.out.println(sb);
 		System.out.println(sb.toString());
