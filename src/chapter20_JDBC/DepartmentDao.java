@@ -2,6 +2,7 @@ package chapter20_JDBC;
 
 import java.util.ArrayList;
 import java.util.List;
+import db.DBConn;
 
 public class DepartmentDao extends DBConn {
 	

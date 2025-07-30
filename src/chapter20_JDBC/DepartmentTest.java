@@ -7,7 +7,7 @@ public class DepartmentTest {
 	public static void main(String[] args) {
 		DepartmentDao dao = new DepartmentDao();
 		DepartmentVo insertVo = new DepartmentVo();
-		insertVo.setDeptId("XYQ");
+		insertVo.setDeptId("XYC");
 		insertVo.setDeptName("테스트2");
 		insertVo.setUnitId("A");
 		
