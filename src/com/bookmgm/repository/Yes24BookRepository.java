@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bookmgm.model.Book;
-import com.scoremgm.model.Member;
+import com.scoremgm.model.MemberVo;
 
 public class Yes24BookRepository implements BookRepository {
 	

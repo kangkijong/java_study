@@ -37,9 +37,9 @@ public class ScoreMgmSystem {
 				case REGISTER:	service.register();		break;
 				case LIST:		service.list();			break;
 				case SEARCH:	service.search();		break;
-				case UPDATE:	service.update();		break;
-				case DELETE:	service.delete();		break;
-				case EXIT:		service.exit();			break;
+//				case UPDATE:	service.update();		break;
+//				case DELETE:	service.delete();		break;
+//				case EXIT:		service.exit();			break;
 				default:
 					System.out.println("=> 메뉴 준비중 입니다.");
 			}
