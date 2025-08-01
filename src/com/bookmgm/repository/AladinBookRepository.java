@@ -5,9 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bookmgm.model.Book;
-import com.scoremgm.model.MemberVo;
 
-public class AladinBookRepository implements BookRepository {
+public class AladinBookRepository implements BookRepository{
 	
 	List<Book> library = new ArrayList<Book>();
 	
@@ -25,7 +24,7 @@ public class AladinBookRepository implements BookRepository {
 	}
 	
 	@Override
-	public List<Book> selectAll() {
+	public List<Book> selectAll(){
 		return library;
 	}
 	
@@ -39,6 +38,7 @@ public class AladinBookRepository implements BookRepository {
 				break;
 			}
 		}
+		
 		return book;
 	}
 	
@@ -46,7 +46,6 @@ public class AladinBookRepository implements BookRepository {
 	public void update(Book book) {
 		int idx = -1;
 		int i = 0;
-		
 		for(Book b : library) {
 			if(b.getId().equals(book.getId())) {
 				idx = i;
@@ -55,18 +54,15 @@ public class AladinBookRepository implements BookRepository {
 			i++;
 		}
 		library.set(idx, book);
-		
 	}
 	
 	@Override
 	public void remove(String id) {
 		Iterator<Book> ie = library.iterator();
 		while(ie.hasNext()) {
-			Book b = ie.next();
-			if(b.getId().equals(id)) {
+			Book book = ie.next();
+			if(book.getId().equals(id)) 
 				ie.remove();
-				break;
-			}
 		}
 	}
 	
@@ -75,15 +71,28 @@ public class AladinBookRepository implements BookRepository {
 		Iterator<Book> ie = library.iterator();
 		while(ie.hasNext()) {
 			Book b = ie.next();
-			if(b == book) {
-				ie.remove();
-				break;
-			}
+			if(b == book ) ie.remove();
 		}
 	}
+	
+	
 	
 	@Override
 	public int getCount() {
 		return library.size();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,24 +2,23 @@ package com.bookmgm.service;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import com.bookmgm.application.BookManagementApplication;
 import com.bookmgm.model.Book;
 import com.bookmgm.repository.AladinBookRepository;
-import com.bookmgm.repository.BookRepository;
 import com.bookmgm.repository.InMemoryBookRepository;
 import com.bookmgm.repository.Yes24BookRepository;
 
+import db.GenericRepositoryInterface;
+
 public class DefaultBookService implements BookService {
 	BookManagementApplication bma;
-	BookRepository repository;
+	GenericRepositoryInterface<Book> repository;
 	
 	public DefaultBookService() {}
 	public DefaultBookService(BookManagementApplication bma) {
 		this.bma = bma;
 		selectRepository();
-//		repository = new InMemoryBookRepository();
 	}
 	
 	/**
@@ -29,10 +28,10 @@ public class DefaultBookService implements BookService {
 		Random rd = new Random();
 		Book book = new Book();
 		
-		book.setId(String.valueOf(rd.nextInt(1000, 9999)));
+		book.setIsbn(rd.nextInt(1000, 9999));
 		
 		System.out.print("도서명> ");
-		book.setName(bma.scan.next());
+		book.setTitle(bma.scan.next());
 		
 		System.out.print("저자> ");
 		book.setAuthor(bma.scan.next());
@@ -50,7 +49,7 @@ public class DefaultBookService implements BookService {
 	 */
 	public Book createBook(Book book) {
 		System.out.print("도서명> ");
-		book.setName(bma.scan.next());
+		book.setTitle(bma.scan.next());
 		
 		System.out.print("저자> ");
 		book.setAuthor(bma.scan.next());
@@ -71,11 +70,11 @@ public class DefaultBookService implements BookService {
 		System.out.print("도서관 선택> ");
 		int rno = bma.scan.nextInt();
 		if(rno == 1) {
-			repository = new InMemoryBookRepository();
+			repository = new InMemoryBookRepository(1);
 		} else if(rno == 2) {
-			repository = new AladinBookRepository();
+			repository = new InMemoryBookRepository(2);
 		} else if(rno == 3) {
-			repository = new Yes24BookRepository();
+			repository = new InMemoryBookRepository(3);
 		}
 		
 	}
@@ -87,10 +86,10 @@ public class DefaultBookService implements BookService {
 	public void register() {
 //		selectRepository();
 		Book book = createBook();
-		if(repository.insert(book)) {
-			System.out.println("✔ 도서가 등록되었습니다.");
+		if(repository.insert(book) == 1) {
+			System.out.println("✅ 도서가 등록되었습니다.");
 		} else {
-			System.out.println("❌ 도서가 등록되지 않았습니다.");
+			System.out.println("🚫 도서가 등록되지 않았습니다.");
 		}
 		
 		bma.showMenu();
@@ -102,12 +101,18 @@ public class DefaultBookService implements BookService {
 	@Override
 	public void list() {
 		if(getCount() != 0) {
-			List<Book> library = repository.selectAll();
+			List<Book> library = repository.findAll();
+			System.out.println("---------------------------------------------------");
 			library.forEach(book -> {
-				printBook(book);
+					System.out.print("[" + book.getBid() + "]\t");
+					System.out.print(book.getTitle() + " - ");
+					System.out.print(book.getAuthor() + ",\t");
+					System.out.print(book.getPrice() + ",\t");
+					System.out.print(book.getBdate() + "\n");
 			});
+			System.out.println("---------------------------------------------------");
 		} else {
-			System.out.println("=> 등록된 도서가 존재하지 않습니다.");
+			System.out.println("🚫 등록된 도서가 존재하지 않습니다.");
 		}
 		bma.showMenu();
 	}
@@ -119,15 +124,16 @@ public class DefaultBookService implements BookService {
 	public void search() {
 		if(getCount() != 0) {
 			System.out.print("도서번호> ");
-			Book book = repository.select(bma.scan.next());
-			if(book != null) {
+			Book book = repository.find(bma.scan.next());
+			if(book.getBid() != null) {
 				printBook(book);
 			} else {
-				System.out.println("=> 검색한 도서가 존재하지 않습니다.");
+				System.out.println("🚫 검색한 도서가 존재하지 않습니다.");
 			}
 		} else {
-			System.out.println("=> 등록된 도서가 존재하지 않습니다.");
+			System.out.println("🚫 등록된 도서가 존재하지 않습니다.");
 		}
+		System.out.println("---------------------------------------------------");
 		bma.showMenu();
 	}
 	
@@ -136,9 +142,7 @@ public class DefaultBookService implements BookService {
 	 * @param book
 	 */
 	public void printBook(Book book) {
-		System.out.println("---------------------------------------------------");
-		System.out.println("[" + book.getId() + "] " + book.getName() + " - " + book.getAuthor() + ", " + book.getPrice());
-//		System.out.println("---------------------------------------------------");
+		System.out.println("[" + book.getBid() + "] " + book.getTitle() + " - " + book.getAuthor() + ", " + book.getPrice());
 	}
 	
 	/**
@@ -148,17 +152,19 @@ public class DefaultBookService implements BookService {
 	public void update() {
 		if(getCount() != 0) {
 			System.out.print("도서번호> ");
-			Book book = repository.select(bma.scan.next());
-			if(book != null) {
+			Book book = repository.find(bma.scan.next());
+			
+			if(book.getBid() != null) {
 				repository.update(createBook(book));
-				System.out.println("=> 도서가 수정되었습니다.");
+				System.out.println("✅ 도서가 수정되었습니다.");
 				printBook(book);
 			} else {
-				System.out.println("=> 검색한 도서가 존재하지 않습니다.");
+				System.out.println("🚫 검색한 도서가 존재하지 않습니다.");
 			}
 		} else {
-			System.out.println("=> 등록된 도서가 존재하지 않습니다.");
+			System.out.println("🚫 등록된 도서가 존재하지 않습니다.");
 		}
+		System.out.println("---------------------------------------------------");
 		bma.showMenu();
 	}
 	
@@ -169,16 +175,16 @@ public class DefaultBookService implements BookService {
 	public void delete() {
 		if(getCount() != 0) {
 			System.out.print("도서번호> ");
-			Book book = repository.select(bma.scan.next());
-			if(book != null) {
-//				repository.remove(book.getId());
-				repository.remove(book);
-				System.out.println("=> 도서가 삭제되었습니다.");
+			Book book = repository.find(bma.scan.next());
+			
+			if(book.getBid() != null) {
+				repository.remove(book.getBid());
+				System.out.println("✅ 도서가 삭제되었습니다.");
 			} else {
-				System.out.println("=> 검색한 도서가 존재하지 않습니다.");
+				System.out.println("🚫 검색한 도서가 존재하지 않습니다.");
 			}
 		} else {
-			System.out.println("=> 등록된 도서가 존재하지 않습니다.");
+			System.out.println("🚫 등록된 도서가 존재하지 않습니다.");
 		}
 		bma.showMenu();
 	}
@@ -188,7 +194,7 @@ public class DefaultBookService implements BookService {
 	 */
 	@Override
 	public void exit() {
-		System.out.println("시스템이 종료됩니다.");
+		System.out.println("✅ 시스템이 종료됩니다.");
 		System.exit(0);
 	}
 	
