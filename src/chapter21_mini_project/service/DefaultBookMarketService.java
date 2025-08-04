@@ -142,9 +142,70 @@ public class DefaultBookMarketService implements BookMarketService {
 	 */
 	@Override
 	public void menuCartRemoveItemCount() {
-		System.out.println("장바구니의 항목 수량 줄이기");
-		
-		bma.showMenu();
+	    if (cartList.isEmpty()) {
+	        System.out.println("🛒 장바구니가 비어 있습니다.");
+	        bma.showMenu();
+	        return;
+	    }
+
+	    // 현재 장바구니 목록 출력
+	    System.out.println("📚 현재 장바구니 항목:");
+	    for (BookMarketCart item : cartList) {
+	        System.out.println("도서 ID: " + item.getBid() + " | 수량: " + item.getQuantity() + " | 총액: " + item.getTotal());
+	    }
+
+	    // 도서 ID 입력
+	    System.out.print("수량을 줄일 도서의 ID를 입력하세요 : ");
+	    String bid = bma.scan.next();
+
+	    // 장바구니에서 해당 항목 찾기
+	    BookMarketCart target = null;
+	    for (BookMarketCart item : cartList) {
+	        if (item.getBid().equals(bid)) {
+	            target = item;
+	            break;
+	        }
+	    }
+
+	    if (target == null) {
+	        System.out.println("❌ 해당 도서 ID는 장바구니에 없습니다.");
+	        bma.showMenu();
+	        return;
+	    }
+
+	    // 수량 입력
+	    System.out.print("줄일 수량을 입력하세요 : ");
+	    if (!bma.scan.hasNextInt()) {
+	        System.out.println("❌ 잘못된 수량입니다.");
+	        bma.scan.next(); // 버퍼 비우기
+	        bma.showMenu();
+	        return;
+	    }
+
+	    int reduceQty = bma.scan.nextInt();
+
+	    if (reduceQty <= 0) {
+	        System.out.println("❌ 수량은 1 이상이어야 합니다.");
+	        bma.showMenu();
+	        return;
+	    }
+
+	    if (reduceQty >= target.getQuantity()) {
+	        cartList.remove(target);
+	        System.out.println("✅ 수량이 0 이하가 되어 장바구니에서 해당 항목이 삭제되었습니다.");
+	    } else {
+	        target.setQuantity(target.getQuantity() - reduceQty);
+
+	        // 도서 가격 다시 계산
+	        BookMarketBooks book = repository.find(bid);
+	        if (book != null) {
+	            target.setTotal(target.getQuantity() * book.getPrice());
+	        }
+
+	        System.out.println("✅ 수량이 줄어들었습니다. 현재 수량: " + target.getQuantity());
+	    }
+
+	    bma.showMenu();
 	}
 	
 	/**
@@ -200,16 +261,46 @@ public class DefaultBookMarketService implements BookMarketService {
 	 */
 	@Override
 	public void menuCartBill() {
-		System.out.print("배송받을 분은 고객정보와 같습니까? (Y/N): ");
-		
-		System.out.print("배송지를 입력해주세요 : ");
-		
-		System.out.println("----------------- 배송받을 고객 정보 ----------------- ");
-		System.out.println("고객명 : " + "\t연락처 : ");
-		System.out.println("배송지 : " + "\t발송일 : ");
-		System.out.println("장바구니 상품 목록 : ");
-		
-		bma.showMenu();
+	    String deliveryName = bmm.getName();
+	    String deliveryPhone = bmm.getPhone();
+	    String deliveryCity = bmm.getCity();
+
+	    System.out.print("배송받을 분은 고객정보와 같습니까? (Y/N): ");
+	    String sameInfo = bma.scan.next();
+
+	    if (sameInfo.equalsIgnoreCase("N")) {
+	        System.out.print("배송받을 고객명을 입력하세요: ");
+	        deliveryName = bma.scan.next();
+
+	        System.out.print("배송받을 고객의 연락처를 입력하세요: ");
+	        deliveryPhone = bma.scan.next();
+
+	        System.out.print("배송받을 고객의 주소를 입력해주세요: ");
+	        deliveryCity = bma.scan.next();
+	    }
+
+	    // 현재 날짜 구하기
+	    String today = java.time.LocalDate.now().toString();
+
+	    System.out.println("\n----------------- 배송받을 고객 정보 --------------------- ");
+	    System.out.println("고객명 : " + deliveryName + "\t연락처 : " + deliveryPhone);
+	    System.out.println("배송지 : " + deliveryCity + "\t발송일 : " + today);
+	    System.out.println("-----------------------------------------------------");
+
+	    if (cartList.isEmpty()) {
+	        System.out.println("🛒 장바구니에 상품이 없습니다.");
+	    } else {
+	        System.out.println("도서ID\t\t수량\t합계");
+	        int totalSum = 0;
+	        for (BookMarketCart item : cartList) {
+	            System.out.println(item.getBid() + "\t" + item.getQuantity() + "\t" + item.getTotal() + "원");
+	            totalSum += item.getTotal();
+	        }
+	        System.out.println("-----------------------------------------------------");
+	        System.out.println("\t\t\t\t주문 총액 : " + totalSum + "원\n");
+	    }
+
+	    bma.showMenu();
 	}
 	
 	/**
