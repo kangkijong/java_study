@@ -33,7 +33,7 @@ public class DefaultBookMarketService implements BookMarketService {
 	}
 	
 	/**
-	 * 고객 정보 확인하기
+	 * 1. 고객 정보 확인하기
 	 */
 	@Override
 	public void menuGuestInfo() {
@@ -44,10 +44,10 @@ public class DefaultBookMarketService implements BookMarketService {
 	}
 	
 	/**
-	 * 장바구니 상품 목록 보기
+	 * 2. 장바구니 상품 목록 보기	// ✔
 	 */
 	@Override
-	public void menuCartItemList() {	// ✔
+	public void menuCartItemList() {	
 		if (cartList.isEmpty()) {
 	        System.out.println("🛒 장바구니가 비어 있습니다.");
 	    } else {
@@ -58,11 +58,12 @@ public class DefaultBookMarketService implements BookMarketService {
 	                " | 합계 : " + item.getTotal() + "원");
 	        }
 	    }
+		
 	    bma.showMenu();
 	}
 	
 	/**
-	 * 장바구니 비우기
+	 * 3. 장바구니 비우기		// ✔
 	 */
 	@Override
 	public void menuCartClear() {
@@ -75,7 +76,7 @@ public class DefaultBookMarketService implements BookMarketService {
 	    System.out.print("장바구니의 모든 항목을 삭제하시겠습니까? (Y/N): ");
 	    String input = bma.scan.next();
 
-	    if (input.equalsIgnoreCase("Y")) {
+	    if (input.equalsIgnoreCase("Y")) {	//대소문자 구분않고 비교
 	        cartList.clear(); // ✅ 실제로 비움
 	        System.out.println("✅ 장바구니의 모든 항목을 삭제했습니다.");
 	    } else {
@@ -86,7 +87,7 @@ public class DefaultBookMarketService implements BookMarketService {
 	}
 	
 	/**
-	 * 바구니에 항목 추가하기 (도서 목록 표시하기)
+	 * 4. 바구니에 항목 추가하기 (도서 목록 표시하기)	// ✔
 	 */
 	@Override
 	public void menuCartAddItem() {
@@ -104,41 +105,48 @@ public class DefaultBookMarketService implements BookMarketService {
 		String bid = bma.scan.next();
 		
 		// 도서 ID로 책 찾기
-	    BookMarketBooks book = repository.find(bid);		// ✔
+	    BookMarketBooks book = repository.find(bid);		
 
 	    if (book == null) {
 	        System.out.println("❌ 해당 ID의 도서를 찾을 수 없습니다.");
 	        bma.showMenu();
 	        return;
 	    }
+	    
+	    System.out.print("장바구니에 추가하시겠습니까? (Y/N): ");
+	    String confirm = bma.scan.next();
 
-	    // 장바구니에 이미 있는지 확인
-	    BookMarketCart existingCart = null;
-	    for (BookMarketCart item : cartList) {
-	        if (item.getBid().equals(bid)) {
-	            existingCart = item;
-	            break;
-	        }
-	    }
+	    if (confirm.equalsIgnoreCase("Y")) {
+	    	// 장바구니에 이미 있는지 확인
+		    BookMarketCart existingCart = null;
+		    for (BookMarketCart item : cartList) {
+		        if (item.getBid().equals(bid)) {
+		            existingCart = item;
+		            break;
+		        }
+		    }
 
-	    if (existingCart != null) {
-	        existingCart.setQuantity(existingCart.getQuantity() + 1);
-	        existingCart.setTotal(existingCart.getQuantity() * book.getPrice());
-	        System.out.println("✅ 수량이 1 증가되었습니다.");
+		    if (existingCart != null) {
+		        existingCart.setQuantity(existingCart.getQuantity() + 1);
+		        existingCart.setTotal(existingCart.getQuantity() * book.getPrice());
+		        System.out.println("✅ 수량이 1 증가되었습니다.");
+		    } else {
+		        BookMarketCart cart = new BookMarketCart();
+		        cart.setBid(bid);
+		        cart.setQuantity(1);
+		        cart.setTotal(book.getPrice());
+		        cartList.add(cart);
+		        System.out.println("✅ 도서가 장바구니에 추가되었습니다.");
+		    }
 	    } else {
-	        BookMarketCart cart = new BookMarketCart();
-	        cart.setBid(bid);
-	        cart.setQuantity(1);
-	        cart.setTotal(book.getPrice());
-	        cartList.add(cart);
-	        System.out.println("✅ 도서가 장바구니에 추가되었습니다.");
+	        System.out.println("❌ 장바구니에 등록이 취소되었습니다.");
 	    }
 
 		bma.showMenu();
 	}
 	
 	/**
-	 * 장바구니의 항목 수량 줄이기
+	 * 5. 장바구니의 항목 수량 줄이기		// ✔
 	 */
 	@Override
 	public void menuCartRemoveItemCount() {
@@ -209,10 +217,10 @@ public class DefaultBookMarketService implements BookMarketService {
 	}
 	
 	/**
-	 * 장바구니의 항목 삭제하기
+	 * 6. 장바구니의 항목 삭제하기			// ✔
 	 */
 	@Override
-	public void menuCartRemoveItem() {	// ✔
+	public void menuCartRemoveItem() {
 	    if (cartList.isEmpty()) {
 	        System.out.println("🛒 장바구니가 비어 있습니다.");
 	        bma.showMenu();
@@ -257,7 +265,7 @@ public class DefaultBookMarketService implements BookMarketService {
 	}
 	
 	/**
-	 * 영수증 표시하기
+	 * 7. 영수증 표시하기
 	 */
 	@Override
 	public void menuCartBill() {
@@ -282,10 +290,10 @@ public class DefaultBookMarketService implements BookMarketService {
 	    // 현재 날짜 구하기
 	    String today = java.time.LocalDate.now().toString();
 
-	    System.out.println("\n----------------- 배송받을 고객 정보 --------------------- ");
+	    System.out.println("\n--------------- 배송받을 고객 정보 ------------------- ");
 	    System.out.println("고객명 : " + deliveryName + "\t연락처 : " + deliveryPhone);
 	    System.out.println("배송지 : " + deliveryCity + "\t발송일 : " + today);
-	    System.out.println("-----------------------------------------------------");
+	    System.out.println("-------------------------------------------------");
 
 	    if (cartList.isEmpty()) {
 	        System.out.println("🛒 장바구니에 상품이 없습니다.");
@@ -296,15 +304,15 @@ public class DefaultBookMarketService implements BookMarketService {
 	            System.out.println(item.getBid() + "\t" + item.getQuantity() + "\t" + item.getTotal() + "원");
 	            totalSum += item.getTotal();
 	        }
-	        System.out.println("-----------------------------------------------------");
-	        System.out.println("\t\t\t\t주문 총액 : " + totalSum + "원\n");
+	        System.out.println("-------------------------------------------------");
+	        System.out.println("\t\t\t주문 총액 : " + totalSum + "원\n");
 	    }
 
 	    bma.showMenu();
 	}
 	
 	/**
-	 * 종료
+	 * 8. 종료
 	 */
 	@Override
 	public void menuExit() {

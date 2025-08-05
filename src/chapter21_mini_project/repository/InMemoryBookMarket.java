@@ -25,8 +25,8 @@ public class InMemoryBookMarket extends DBConn
 	@Override
 	public List<BookMarketBooks> findAll() {
 		List<BookMarketBooks> list = null;
-		String sql = "select bid, title, price, author, intro, category, left(bdate, 10) "
-				+ "from book_market_books ";
+		String sql = "SELECT bid, title, price, author, intro, category, left(bdate, 10) "
+				+ "FROM book_market_books ";
 		
 		try {
 			getPreparedStatement(sql);
@@ -54,7 +54,8 @@ public class InMemoryBookMarket extends DBConn
 	@Override
 	public BookMarketBooks find(String id) {	// ✔
 		BookMarketBooks book = null;
-	    String sql = "SELECT bid, title, price, author, intro, category, bdate FROM book_market_books WHERE bid = ?";
+	    String sql = "SELECT bid, title, price, author, intro, category, bdate "
+	    			 + " FROM book_market_books WHERE bid = ? ";
 	    
 	    try {
 	        getPreparedStatement(sql);
